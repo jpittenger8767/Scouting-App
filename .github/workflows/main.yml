@@ -22,6 +22,8 @@ jobs:
         run: pip install requests openpyxl statbotics
         
       - name: Run script
+        env:
+          TBA_KEY_SECRET: ${{ secrets.TBA_KEY_SECRET }} # This matches the os.getenv name
         run: python generate_scouting_sheet.py
         
       - name: Commit and Push spreadsheet
