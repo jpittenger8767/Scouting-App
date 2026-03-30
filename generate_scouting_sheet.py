@@ -17,7 +17,7 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-TBA_KEY = os.getenv("TBA_SECRET_KEY")
+TBA_KEY = os.getenv("TBA_KEY_SECRET")
 EVENT    = "2026miken" 
 OUTPUT   = f"{EVENT}_scouting.xlsx"
 # ─────────────────────────────────────────────────────────────────────────────
