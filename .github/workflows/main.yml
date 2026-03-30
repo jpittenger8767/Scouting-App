@@ -1,0 +1,33 @@
+name: Run Scouting Script
+on:
+  push:                   # Runs every time you push code
+  workflow_dispatch:      # Adds a manual "Run" button
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # IMPORTANT: Gives the bot permission to upload the file
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: pip install requests openpyxl statbotics
+        
+      - name: Run script
+        run: python generate_scouting_sheet.py
+        
+      - name: Commit and Push spreadsheet
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.xlsx
+          git commit -m "Auto-update scouting data" || echo "No changes to commit"
+          git push
