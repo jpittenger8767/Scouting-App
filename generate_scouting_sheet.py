@@ -256,6 +256,34 @@ def main():
     rows_rank.sort(key=lambda r: (r[0] == "N/A", r[0] if r[0] != "N/A" else 9999))
     build_sheet(wb, "Rankings (TBA)", headers_rank, rows_rank, col_widths_rank, "B71C1C")
 
+    # ── Sheet 5: Pick List ────────────────────────────────────────────────────────
+headers_pick = ["Pick Order", "Team #", "Nickname", "OPR", "DPR", "CCWM", "DNP (x = exclude)"]
+col_widths_pick = [10, 9, 22, 10, 10, 10, 18]
+
+rows_pick = []
+for tn in team_numbers:
+    key  = f"frc{tn}"
+    info = team_map.get(tn, {})
+    opr_val = oprs.get(key)
+    rows_pick.append([
+        None,  # Pick order filled in after sorting
+        tn,
+        info.get("nickname", "N/A"),
+        fmt(opr_val),
+        fmt(dprs.get(key)),
+        fmt(ccwms.get(key)),
+        "",  # DNP column, manually filled
+    ])
+
+# Sort by OPR descending
+rows_pick.sort(key=lambda r: (r[3] == "N/A", -r[3] if r[3] != "N/A" else 0))
+
+# Fill in pick order after sorting
+for i, row in enumerate(rows_pick, 1):
+    row[0] = i
+
+build_sheet(wb, "2nd Pick List", headers_pick, rows_pick, col_widths_pick, "E65100")
+
     wb.save(OUTPUT)
     print(f"\n✅ Saved: {OUTPUT}")
     print(f"   Sheets: Overview | EPA (Statbotics) | OPR (TBA) | Rankings (TBA)")
