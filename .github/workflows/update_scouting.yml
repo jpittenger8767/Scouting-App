@@ -1,0 +1,36 @@
+name: Update FRC Scouting Data
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour on the hour
+  workflow_dispatch:      # Allows you to run it manually with a button click
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install requests statbotics openpyxl
+
+    - name: Run scouting script
+      env:
+        TBA_KEY_SECRET: ${{ secrets.TBA_KEY_SECRET }}
+      run: python generate_scouting_sheet.py
+
+    - name: Commit and Push XLSX
+      run: |
+        git config --global user.name "ScoutingBot"
+        git config --global user.email "bot@github.com"
+        git add *.xlsx
+        git commit -m "Auto-update scouting data: $(date)" || exit 0
+        git push

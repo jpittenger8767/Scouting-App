@@ -10,13 +10,14 @@ Usage:
 """
 
 import requests
+import os
 import statbotics
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-TBA_KEY  = "9pz5NTENsIynkyzBrVYYD8lebvYCKAtO8RRc2NPAvbt6arwflk9ifvJLxgai9gJA" 
+TBA_KEY = os.getenv("TBA_KEY_SECRET")
 EVENT    = "2026miken" 
 OUTPUT   = f"{EVENT}_scouting.xlsx"
 # ─────────────────────────────────────────────────────────────────────────────
