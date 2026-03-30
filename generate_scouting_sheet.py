@@ -280,7 +280,7 @@ def main():
 
     # Fill in pick order after sorting
     for i, row in enumerate(rows_pick, 1):
-    row[0] = i
+        row[0] = i
 
     build_sheet(wb, "2nd Pick List", headers_pick, rows_pick, col_widths_pick, "E65100")
 
