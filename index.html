@@ -378,9 +378,13 @@
       <div class="field">
         <label>Fuel Scored (Auto)</label>
         <div class="counter" id="autoFuelCounter">
-          <button class="minus" onclick="adjust('autoFuel',-1)">−</button>
+          <button class="minus"
+            onmousedown="startHold('autoFuel',-1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',-1)" ontouchend="stopHold()">−</button>
           <div class="val" id="autoFuelVal">0</div>
-          <button class="plus"  onclick="adjust('autoFuel', 1)">+</button>
+          <button class="plus"
+            onmousedown="startHold('autoFuel',1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',1)" ontouchend="stopHold()">+</button>
         </div>
       </div>
       <div class="field">
@@ -410,9 +414,13 @@
       <div class="field">
         <label>Fuel Scored (Teleop)</label>
         <div class="counter">
-          <button class="minus" onclick="adjust('teleopFuel',-1)">−</button>
-          <div class="val" id="teleopFuelVal">0</div>
-          <button class="plus"  onclick="adjust('teleopFuel', 1)">+</button>
+        <button class="minus"
+          onmousedown="startHold('teleopFuel',-1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+          ontouchstart="startHold('teleopFuel',-1)" ontouchend="stopHold()">−</button>
+        <div class="val" id="teleopFuelVal">0</div>
+        <button class="plus"
+          onmousedown="startHold('teleopFuel',1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+          ontouchstart="startHold('teleopFuel',1)" ontouchend="stopHold()">+</button>
         </div>
       </div>
       <div class="field">
@@ -503,11 +511,25 @@
   let entries = JSON.parse(localStorage.getItem('scoutingEntries') || '[]');
   updateCount();
 
-  // ── Counter ──────────────────────────────────────────────────────────────
-  function adjust(key, delta) {
-    counters[key] = Math.max(0, counters[key] + delta);
-    document.getElementById(key + 'Val').textContent = counters[key];
-  }
+ // ── Counter ──────────────────────────────────────────────────────────────
+let holdTimer, holdInterval;
+
+function adjust(key, delta) {
+  counters[key] = Math.max(0, counters[key] + delta);
+  document.getElementById(key + 'Val').textContent = counters[key];
+}
+
+function startHold(key, delta) {
+  adjust(key, delta);
+  holdTimer = setTimeout(() => {
+    holdInterval = setInterval(() => adjust(key, delta), 80);
+  }, 400);
+}
+
+function stopHold() {
+  clearTimeout(holdTimer);
+  clearInterval(holdInterval);
+}
 
   // ── Toggle Picker ────────────────────────────────────────────────────────
   function pick(btn, groupId, activeClass) {
