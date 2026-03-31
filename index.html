@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NB Robotics | Match Scouting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111520;
+      --card:      #161c2c;
+      --border:    #1e2a42;
+      --accent:    #00aaff;
+      --accent2:   #ff6a00;
+      --green:     #00e676;
+      --red:       #ff1744;
+      --text:      #e8eaf0;
+      --muted:     #5a6480;
+      --label:     #8899bb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0d1526 0%, #111d35 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 24px rgba(0,170,255,0.12);
+    }
+
+    .logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .logo span { color: var(--accent2); }
+
+    header .tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-left: auto;
+    }
+
+    /* ── Main ── */
+    main {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── Section Cards ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(90deg, #0d1a2e, #131e35);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .card-header h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .card-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* ── Form Elements ── */
+    .field { display: flex; flex-direction: column; gap: 5px; }
+
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--label);
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select,
+    textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 15px;
+      padding: 10px 12px;
+      width: 100%;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0,170,255,0.12);
+    }
+
+    select option { background: var(--card); }
+
+    textarea { resize: vertical; min-height: 80px; font-size: 13px; line-height: 1.5; }
+
+    /* ── Row layout ── */
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+    /* ── Counter ── */
+    .counter {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .counter button {
+      background: #1a2235;
+      border: none;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .counter button:active { background: #243050; }
+    .counter button.minus { border-right: 1px solid var(--border); }
+    .counter button.plus  { border-left:  1px solid var(--border); }
+
+    .counter .val {
+      flex: 1;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 20px;
+      color: var(--accent);
+      user-select: none;
+    }
+
+    /* ── Toggle Buttons ── */
+    .toggle-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      min-width: 70px;
+      padding: 10px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .toggle-btn.active-yes {
+      background: rgba(0,230,118,0.12);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .toggle-btn.active-no {
+      background: rgba(255,23,68,0.10);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .toggle-btn.active-sel {
+      background: rgba(0,170,255,0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Star Rating ── */
+    .stars {
+      display: flex;
+      gap: 6px;
+    }
+
+    .star {
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--border);
+      transition: color 0.15s, transform 0.1s;
+      user-select: none;
+    }
+
+    .star.filled { color: #ffb300; }
+    .star:active { transform: scale(1.2); }
+
+    /* ── Submit ── */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #005fa3, #0088dd);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(0,136,221,0.25);
+    }
+
+    .btn-submit:active { opacity: 0.85; transform: scale(0.99); }
+
+    .btn-export {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid var(--accent2);
+      background: rgba(255,106,0,0.08);
+      color: var(--accent2);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-export:active { background: rgba(255,106,0,0.18); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a2a1a;
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Entry count badge ── */
+    .entry-count {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 4px 0 0;
+    }
+
+    .entry-count span { color: var(--accent); font-weight: bold; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">NB<span>8767</span></div>
+  <div style="display:flex;flex-direction:column;gap:2px;">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;">Match Scouting</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);">2026 REBUILT</div>
+  </div>
+  <div class="tag" id="headerCount">0 entries</div>
+</header>
+
+<main>
+
+  <!-- Match Info -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot" style="background:var(--accent);box-shadow:0 0 6px var(--accent);"></div>
+      <h2>Match Info</h2>
+    </div>
+    <div class="card-body">
+      <div class="row-2">
+        <div class="field">
+          <label>Match #</label>
+          <input type="number" id="matchNum" min="1" placeholder="1" />
+        </div>
+        <div class="field">
+          <label>Team #</label>
+          <input type="number" id="teamNum" min="1" placeholder="8767" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Alliance</label>
+          <div class="toggle-group" id="allianceGroup">
+            <button class="toggle-btn" data-val="Red" onclick="pick(this,'allianceGroup','active-sel')">🔴 RED</button>
+            <button class="toggle-btn" data-val="Blue" onclick="pick(this,'allianceGroup','active-sel')">🔵 BLUE</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Scouter</label>
+          <input type="text" id="scouter" placeholder="Your name" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot" style="background:#b388ff;box-shadow:0 0 6px #b388ff;"></div>
+      <h2>Autonomous</h2>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Fuel Scored (Auto)</label>
+        <div class="counter" id="autoFuelCounter">
+          <button class="minus"
+            onmousedown="startHold('autoFuel',-1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',-1)" ontouchend="stopHold()">−</button>
+          <div class="val" id="autoFuelVal">0</div>
+          <button class="plus"
+            onmousedown="startHold('autoFuel',1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',1)" ontouchend="stopHold()">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Mobility (Left Start Line?)</label>
+        <div class="toggle-group" id="mobilityGroup">
+          <button class="toggle-btn" data-val="Yes" onclick="pick(this,'mobilityGroup','active-yes')">YES</button>
+          <button class="toggle-btn" data-val="No"  onclick="pick(this,'mobilityGroup','active-no')">NO</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Auto Tower Climb</label>
+        <div class="toggle-group" id="autoClimbGroup">
+          <button class="toggle-btn" data-val="None" onclick="pick(this,'autoClimbGroup','active-sel')">NONE</button>
+          <button class="toggle-btn" data-val="L1"   onclick="pick(this,'autoClimbGroup','active-sel')">L1</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teleop -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot" style="background:var(--accent2);box-shadow:0 0 6px var(--accent2);"></div>
+      <h2>Teleop</h2>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Fuel Scored (Teleop)</label>
+        <div class="counter">
+        <button class="minus"
+          onmousedown="startHold('teleopFuel',-1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+          ontouchstart="startHold('teleopFuel',-1)" ontouchend="stopHold()">−</button>
+        <div class="val" id="teleopFuelVal">0</div>
+        <button class="plus"
+          onmousedown="startHold('teleopFuel',1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+          ontouchstart="startHold('teleopFuel',1)" ontouchend="stopHold()">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Preferred Field Zone</label>
+        <div class="toggle-group" id="zoneGroup">
+          <button class="toggle-btn" data-val="Trench" onclick="pick(this,'zoneGroup','active-sel')">TRENCH</button>
+          <button class="toggle-btn" data-val="Bump"   onclick="pick(this,'zoneGroup','active-sel')">BUMP</button>
+          <button class="toggle-btn" data-val="Both"   onclick="pick(this,'zoneGroup','active-sel')">BOTH</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Endgame Tower Climb</label>
+        <div class="toggle-group" id="endgameClimbGroup">
+          <button class="toggle-btn" data-val="None" onclick="pick(this,'endgameClimbGroup','active-sel')">NONE</button>
+          <button class="toggle-btn" data-val="L1"   onclick="pick(this,'endgameClimbGroup','active-sel')">L1</button>
+          <button class="toggle-btn" data-val="L2"   onclick="pick(this,'endgameClimbGroup','active-sel')">L2</button>
+          <button class="toggle-btn" data-val="L3"   onclick="pick(this,'endgameClimbGroup','active-sel')">L3</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Defense & Driver -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
+      <h2>Ratings</h2>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Defense Rating</label>
+        <div class="stars" id="defenseStars" data-key="defense">
+          <span class="star" onclick="setStars('defenseStars',1)">★</span>
+          <span class="star" onclick="setStars('defenseStars',2)">★</span>
+          <span class="star" onclick="setStars('defenseStars',3)">★</span>
+          <span class="star" onclick="setStars('defenseStars',4)">★</span>
+          <span class="star" onclick="setStars('defenseStars',5)">★</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Driver Skill Rating</label>
+        <div class="stars" id="driverStars" data-key="driver">
+          <span class="star" onclick="setStars('driverStars',1)">★</span>
+          <span class="star" onclick="setStars('driverStars',2)">★</span>
+          <span class="star" onclick="setStars('driverStars',3)">★</span>
+          <span class="star" onclick="setStars('driverStars',4)">★</span>
+          <span class="star" onclick="setStars('driverStars',5)">★</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Played Defense?</label>
+        <div class="toggle-group" id="defenseGroup">
+          <button class="toggle-btn" data-val="Yes" onclick="pick(this,'defenseGroup','active-yes')">YES</button>
+          <button class="toggle-btn" data-val="No"  onclick="pick(this,'defenseGroup','active-no')">NO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot" style="background:#ffb300;box-shadow:0 0 6px #ffb300;"></div>
+      <h2>Notes</h2>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Comments / Observations</label>
+        <textarea id="notes" placeholder="Penalties, fouls, notable strategies, mechanical issues..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <button class="btn-submit" onclick="submitEntry()">⚡ SAVE ENTRY</button>
+  <div class="entry-count">Saved entries this session: <span id="entryCount">0</span></div>
+  <button class="btn-export" onclick="exportCSV()">⬇ EXPORT CSV</button>
+
+</main>
+
+<div id="toast">✓ Entry saved!</div>
+
+<script>
+  // ── State ────────────────────────────────────────────────────────────────
+  const counters = { autoFuel: 0, teleopFuel: 0 };
+  const stars    = { defenseStars: 0, driverStars: 0 };
+  let entries = JSON.parse(localStorage.getItem('scoutingEntries') || '[]');
+  updateCount();
+
+ // ── Counter ──────────────────────────────────────────────────────────────
+let holdTimer, holdInterval;
+
+function adjust(key, delta) {
+  counters[key] = Math.max(0, counters[key] + delta);
+  document.getElementById(key + 'Val').textContent = counters[key];
+}
+
+function startHold(key, delta) {
+  adjust(key, delta);
+  holdTimer = setTimeout(() => {
+    holdInterval = setInterval(() => adjust(key, delta), 80);
+  }, 400);
+}
+
+function stopHold() {
+  clearTimeout(holdTimer);
+  clearInterval(holdInterval);
+}
+
+  // ── Toggle Picker ────────────────────────────────────────────────────────
+  function pick(btn, groupId, activeClass) {
+    document.querySelectorAll(`#${groupId} .toggle-btn`).forEach(b => {
+      b.classList.remove('active-yes','active-no','active-sel');
+    });
+    btn.classList.add(activeClass);
+  }
+
+  function getPickVal(groupId) {
+    const active = document.querySelector(`#${groupId} .toggle-btn.active-yes, #${groupId} .toggle-btn.active-no, #${groupId} .toggle-btn.active-sel`);
+    return active ? active.dataset.val : '';
+  }
+
+  // ── Stars ────────────────────────────────────────────────────────────────
+  function setStars(groupId, n) {
+    stars[groupId] = n;
+    document.querySelectorAll(`#${groupId} .star`).forEach((s, i) => {
+      s.classList.toggle('filled', i < n);
+    });
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────
+  function submitEntry() {
+    const matchNum  = document.getElementById('matchNum').value.trim();
+    const teamNum   = document.getElementById('teamNum').value.trim();
+    const scouter   = document.getElementById('scouter').value.trim();
+
+    if (!matchNum || !teamNum) {
+      alert('Match # and Team # are required.');
+      return;
+    }
+
+    const entry = {
+      match:         matchNum,
+      team:          teamNum,
+      alliance:      getPickVal('allianceGroup'),
+      scouter:       scouter,
+      auto_fuel:     counters.autoFuel,
+      auto_mobility: getPickVal('mobilityGroup'),
+      auto_climb:    getPickVal('autoClimbGroup'),
+      teleop_fuel:   counters.teleopFuel,
+      field_zone:    getPickVal('zoneGroup'),
+      endgame_climb: getPickVal('endgameClimbGroup'),
+      defense_rating:stars.defenseStars,
+      driver_rating: stars.driverStars,
+      played_defense:getPickVal('defenseGroup'),
+      notes:         document.getElementById('notes').value.trim(),
+      timestamp:     new Date().toISOString(),
+    };
+
+    entries.push(entry);
+    localStorage.setItem('scoutingEntries', JSON.stringify(entries));
+    updateCount();
+    showToast();
+    resetForm();
+  }
+
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  function resetForm() {
+    // Keep match # and increment it
+    const cur = parseInt(document.getElementById('matchNum').value) || 0;
+    document.getElementById('matchNum').value = cur + 1;
+    document.getElementById('teamNum').value  = '';
+    document.getElementById('notes').value    = '';
+
+    counters.autoFuel   = 0;
+    counters.teleopFuel = 0;
+    document.getElementById('autoFuelVal').textContent   = '0';
+    document.getElementById('teleopFuelVal').textContent = '0';
+
+    ['allianceGroup','mobilityGroup','autoClimbGroup','zoneGroup','endgameClimbGroup','defenseGroup'].forEach(g => {
+      document.querySelectorAll(`#${g} .toggle-btn`).forEach(b =>
+        b.classList.remove('active-yes','active-no','active-sel')
+      );
+    });
+
+    ['defenseStars','driverStars'].forEach(g => {
+      stars[g] = 0;
+      document.querySelectorAll(`#${g} .star`).forEach(s => s.classList.remove('filled'));
+    });
+  }
+
+  // ── Export CSV ────────────────────────────────────────────────────────────
+  function exportCSV() {
+    if (entries.length === 0) { alert('No entries to export yet.'); return; }
+
+    const headers = [
+      'Match','Team','Alliance','Scouter',
+      'Auto Fuel','Auto Mobility','Auto Climb',
+      'Teleop Fuel','Field Zone','Endgame Climb',
+      'Defense Rating','Driver Rating','Played Defense',
+      'Notes','Timestamp'
+    ];
+
+    const rows = entries.map(e => [
+      e.match, e.team, e.alliance, e.scouter,
+      e.auto_fuel, e.auto_mobility, e.auto_climb,
+      e.teleop_fuel, e.field_zone, e.endgame_climb,
+      e.defense_rating, e.driver_rating, e.played_defense,
+      `"${(e.notes||'').replace(/"/g,'""')}"`,
+      e.timestamp
+    ]);
+
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `scouting_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function updateCount() {
+    document.getElementById('entryCount').textContent  = entries.length;
+    document.getElementById('headerCount').textContent = `${entries.length} entries`;
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+</script>
+</body>
+</html>
