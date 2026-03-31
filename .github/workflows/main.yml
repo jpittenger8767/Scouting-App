@@ -1,15 +1,15 @@
 name: Run Scouting Script
 on:
-  push:                   # Runs every time you push code
-  workflow_dispatch:      # Adds a manual "Run" button
+  push:
+  workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'  # Runs every hour
+    - cron: '0 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write     # IMPORTANT: Gives the bot permission to upload the file
+      contents: write
     steps:
       - uses: actions/checkout@v4
       
@@ -23,13 +23,16 @@ jobs:
         
       - name: Run script
         env:
-          TBA_KEY2: ${{ secrets.TBA_KEY2 }} # This matches the os.getenv name
-        run: python generate_scouting_sheet.py
+          TBA_KEY2: ${{ secrets.TBA_KEY2 }}
+        run: python pre_scout/generate_scouting_sheet.py
+
+      - name: Copy app to root for Pages
+        run: cp match_scout/index.html index.html
         
-      - name: Commit and Push spreadsheet
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add *.xlsx
-          git commit -m "Auto-update scouting data" || echo "No changes to commit"
-          git push
+          git add *.xlsx index.html
+          git commit -m "Auto-update scouting data [skip ci]" || echo "No changes to commit"
+          git push origin HEAD
