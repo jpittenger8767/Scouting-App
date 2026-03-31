@@ -283,6 +283,24 @@
 
     .btn-export:active { background: rgba(255,106,0,0.18); }
 
+    .btn-clear {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid var(--red);
+      background: rgba(255,23,68,0.08);
+      color: var(--red);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+}
+
+    .btn-clear:active { background: rgba(255,23,68,0.18); }
+
     /* ── Toast ── */
     #toast {
       position: fixed;
@@ -499,6 +517,7 @@
   <button class="btn-submit" onclick="submitEntry()">⚡ SAVE ENTRY</button>
   <div class="entry-count">Saved entries this session: <span id="entryCount">0</span></div>
   <button class="btn-export" onclick="exportCSV()">⬇ EXPORT CSV</button>
+  <button class="btn-clear" onclick="clearEntries()">🗑 CLEAR ALL ENTRIES</button>
 
 </main>
 
@@ -538,6 +557,14 @@ function stopHold() {
     });
     btn.classList.add(activeClass);
   }
+
+  function clearEntries() {
+    if (entries.length === 0) { alert('No entries to clear.'); return; }
+      if (!confirm(`Delete all ${entries.length} entries? This cannot be undone.`)) return;
+          entries = [];
+          localStorage.removeItem('scoutingEntries');
+          updateCount();
+}
 
   function getPickVal(groupId) {
     const active = document.querySelector(`#${groupId} .toggle-btn.active-yes, #${groupId} .toggle-btn.active-no, #${groupId} .toggle-btn.active-sel`);
