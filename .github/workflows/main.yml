@@ -28,8 +28,8 @@ jobs:
 
       - name: Run match scout merger
         run: |
-          if [ -d "match_scouting" ] && [ "$(ls -A match_scouting/*.csv 2>/dev/null)" ]; then
-            python docs/merge_scouting.py match_scouting
+          if [ -d "match_results" ] && [ "$(ls -A match_results/*.csv 2>/dev/null)" ]; then
+            python docs/merge_scouting.py match_results
           else
             echo "No CSVs found, skipping merge."
           fi

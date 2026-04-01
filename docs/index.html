@@ -378,9 +378,13 @@
       <div class="field">
         <label>Fuel Scored (Auto)</label>
         <div class="counter" id="autoFuelCounter">
-          <button class="minus" onclick="adjust('autoFuel',-1)">−</button>
-          <div class="val" id="autoFuelVal">0</div>
-          <button class="plus"  onclick="adjust('autoFuel', 1)">+</button>
+         <button class="minus"
+            onmousedown="startHold('autoFuel',-1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',-1)" ontouchend="stopHold()">−</button>
+        <div class="val" id="autoFuelVal">0</div>
+          <button class="plus"
+            onmousedown="startHold('autoFuel',1)" onmouseup="stopHold()" onmouseleave="stopHold()"
+            ontouchstart="startHold('autoFuel',1)" ontouchend="stopHold()">+</button>
         </div>
       </div>
       <div class="field">
