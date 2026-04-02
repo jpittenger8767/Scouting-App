@@ -38,6 +38,7 @@ jobs:
         env:
           TBA_KEY2: ${{ secrets.TBA_KEY2 }}
         run: python pre_scout/generate_assignments.py
+        continue-on-error: true
         
       - name: Commit and Push
         run: |
