@@ -21,14 +21,16 @@ from openpyxl.utils import get_column_letter
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 TBA_KEY = os.getenv("TBA_KEY2")
 
-EVENT  = "2026miken"
+EVENT  = "2026mifli"  
 OUTPUT = "scouter_assignments.xlsx"
 
 # Edit these names before each event — add or remove as needed
 SCOUTERS = [
-    "Scouter 1",
-    "Scouter 2",
-    "Scouter 3",
+    "Collin",
+    "Joe",
+    "Liz",
+    "Peyton",
+    "Ruthie"
 ]
 # ─────────────────────────────────────────────────────────────────────────────
 
