@@ -26,11 +26,9 @@ OUTPUT = "scouter_assignments.xlsx"
 
 # Edit these names before each event — add or remove as needed
 SCOUTERS = [
-    "Adam",
     "Isaac",
     "Lane",
-    "Tammy",
-    "Anna"
+    "Tammy"
 ]
 # ─────────────────────────────────────────────────────────────────────────────
 
